@@ -54,12 +54,13 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   /**
    * TODO: update the state by using Extended Kalman Filter equations
    */
-  float px = x_[0];
-  float py = x_[1];
-  float vx = x_[2];
-  float vy = x_[4];
+  float px = x_(0);
+  float py = x_(1);
+  float vx = x_(2);
+  float vy = x_(4);
   float rho  = pow(px*px + py*py, 0.5);
-  VectorXd z_pred << rho, atan(py/px), (px*vx + py*vy)/rho;
+  VectorXd z_pred(3);
+  z_pred << rho, atan(py/px), (px*vx + py*vy)/rho;
 
   VectorXd y = z - z_pred;
   MatrixXd Ht = H_.transpose();
