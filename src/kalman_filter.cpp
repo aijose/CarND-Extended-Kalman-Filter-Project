@@ -61,7 +61,11 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   float vy = x_[3];
   float rho  = pow(px*px + py*py, 0.5);
   VectorXd z_pred(3);
-  z_pred << rho, atan2(py+0.0001,px+0.0001), (px*vx + py*vy)/rho;
+  // Add logic to prevent divid by zero when calculating angle
+  if(fabs(px) < 0.00001)
+      z_pred << rho, atan2(py,px+0.0001), (px*vx + py*vy)/rho;
+  else
+      z_pred << rho, atan2(py,px), (px*vx + py*vy)/rho;
 
   VectorXd y = z - z_pred;
   // Make sure angle falls in the range (-pi,pi)
