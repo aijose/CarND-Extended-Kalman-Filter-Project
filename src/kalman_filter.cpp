@@ -61,11 +61,10 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   float vy = x_[3];
   float rho  = pow(px*px + py*py, 0.5);
   VectorXd z_pred(3);
-  //cout << atan2(py,px)/3.1415 << std::endl;
   z_pred << rho, atan2(py+0.01,px+0.01), (px*vx + py*vy)/rho;
 
   VectorXd y = z - z_pred;
-
+  // Make sure angle falls in the range (-pi,pi)
   if (y[1] > M_PI) {
       y[1] = y[1] - floor((y[1]+M_PI)/(2.0*M_PI))*2*M_PI;
   } else if (y[1]  < -M_PI) {
